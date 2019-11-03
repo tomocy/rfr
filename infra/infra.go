@@ -9,6 +9,8 @@ type ViaHTTP struct{}
 
 type index rff.Index
 
+type entry rff.Entry
+
 type rfc rff.RFC
 
 func (r *rfc) adapt() *domain.Entry {
