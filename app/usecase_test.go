@@ -25,6 +25,19 @@ func TestFetchIndex(t *testing.T) {
 	}
 }
 
+func TestFetch(t *testing.T) {
+	expected := &domain.Entry{ID: "1", Title: "a"}
+
+	u := app.NewEntryUsecase(new(mockRepo))
+	actual, err := u.Fetch(context.Background(), "1")
+	if err != nil {
+		t.Fatalf("unexpected error by (*EntryUsecase).Fetch: got %s, expected nil", err)
+	}
+	if !reflect.DeepEqual(actual, expected) {
+		t.Errorf("unexpected entry by (*EntryUsecase).Fetch: got %v, expected %v", actual, expected)
+	}
+}
+
 type mockRepo struct{}
 
 func (r *mockRepo) FetchIndex(context.Context) ([]domain.Entry, error) {
@@ -33,6 +46,10 @@ func (r *mockRepo) FetchIndex(context.Context) ([]domain.Entry, error) {
 	}, nil
 }
 
-func (r *mockRepo) Fetch(context.Context, string) (*domain.Entry, error) {
-	return nil, errors.New("not implemented")
+func (r *mockRepo) Fetch(_ context.Context, id string) (*domain.Entry, error) {
+	if id == "1" {
+		return &domain.Entry{ID: "1", Title: "a"}, nil
+	}
+
+	return nil, errors.New("not found")
 }

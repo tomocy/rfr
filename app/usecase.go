@@ -19,3 +19,7 @@ type EntryUsecase struct {
 func (u *EntryUsecase) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
 	return u.repo.FetchIndex(ctx)
 }
+
+func (u *EntryUsecase) Fetch(ctx context.Context, id string) (*domain.Entry, error) {
+	return u.repo.Fetch(ctx, id)
+}
