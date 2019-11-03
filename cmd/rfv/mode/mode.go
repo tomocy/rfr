@@ -10,7 +10,17 @@ import (
 	"github.com/tomocy/chi"
 	"github.com/tomocy/rfv/app"
 	"github.com/tomocy/rfv/domain"
+	"github.com/tomocy/rfv/infra"
 )
+
+func NewOnHTTP(addr string, printer Printer) *OnHTTP {
+	return &OnHTTP{
+		addr:    addr,
+		router:  chi.NewRouter(),
+		usecase: *app.NewEntryUsecase(new(infra.ViaHTTP)),
+		printer: printer,
+	}
+}
 
 type OnHTTP struct {
 	addr    string
