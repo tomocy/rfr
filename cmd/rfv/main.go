@@ -18,7 +18,12 @@ func main() {
 }
 
 func parseConfig() *config {
-	return new(config)
+	m, f := flag.String("m", "http", "mode"), flag.String("f", "json", "format")
+	flag.Parse()
+
+	return &config{
+		mode: *m, format: *f,
+	}
 }
 
 type config struct {
