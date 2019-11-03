@@ -11,6 +11,12 @@ type index rff.Index
 
 type entry rff.Entry
 
+func (e *entry) adapt() *domain.Entry {
+	return &domain.Entry{
+		ID: e.ID, Title: e.Title,
+	}
+}
+
 type rfc rff.RFC
 
 func (r *rfc) adapt() *domain.Entry {
