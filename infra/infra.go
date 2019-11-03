@@ -19,6 +19,16 @@ func (r *ViaHTTP) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
 	return converted.adapt(), nil
 }
 
+func (r *ViaHTTP) Fetch(ctx context.Context, id string) (*domain.Entry, error) {
+	e, err := rff.HTTPClient.Fetch(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+
+	converted := rfc(*e)
+	return converted.adapt(), nil
+}
+
 type index rff.Index
 
 func (i *index) adapt() []domain.Entry {
