@@ -19,15 +19,18 @@ func main() {
 
 func parseConfig() *config {
 	m, f := flag.String("m", "http", "mode"), flag.String("f", "json", "format")
+	addr := flag.String("addr", ":80", "address")
 	flag.Parse()
 
 	return &config{
 		mode: *m, format: *f,
+		addr: *addr,
 	}
 }
 
 type config struct {
 	mode, format string
+	addr         string
 }
 
 func (c *config) newRunner() runner {
