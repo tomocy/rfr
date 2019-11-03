@@ -1,6 +1,8 @@
 package app
 
 import (
+	"context"
+
 	"github.com/tomocy/rfv/domain"
 )
 
@@ -12,4 +14,8 @@ func NewEntryUsecase(repo domain.EntryRepo) *EntryUsecase {
 
 type EntryUsecase struct {
 	repo domain.EntryRepo
+}
+
+func (u *EntryUsecase) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
+	return u.repo.FetchIndex(ctx)
 }
