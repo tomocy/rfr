@@ -4,6 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	"github.com/tomocy/rfv/cmd/rfv/format"
+	"github.com/tomocy/rfv/cmd/rfv/mode"
 )
 
 func main() {
@@ -23,8 +26,26 @@ type config struct {
 }
 
 func (c *config) newRunner() runner {
-	return new(help)
+	switch c.mode {
+	case modeHTTP:
+		return mode.NewOnHTTP(":80", c.newPrinter())
+	default:
+		return new(help)
+	}
 }
+
+const modeHTTP = "http"
+
+func (c *config) newPrinter() mode.Printer {
+	switch c.format {
+	case formatJSON:
+		return new(format.InJSON)
+	default:
+		return nil
+	}
+}
+
+const formatJSON = "json"
 
 type runner interface {
 	Run() error
