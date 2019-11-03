@@ -1,11 +1,23 @@
 package infra
 
 import (
+	"context"
+
 	"github.com/tomocy/rff"
 	"github.com/tomocy/rfv/domain"
 )
 
 type ViaHTTP struct{}
+
+func (r *ViaHTTP) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
+	idx, err := rff.HTTPClient.FetchIndex(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	converted := index(*idx)
+	return converted.adapt(), nil
+}
 
 type index rff.Index
 
