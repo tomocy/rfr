@@ -36,7 +36,7 @@ type config struct {
 func (c *config) newRunner() runner {
 	switch c.mode {
 	case modeHTTP:
-		return mode.NewOnHTTP(":80", c.newPrinter())
+		return mode.NewOnHTTP(c.addr, c.newPrinter())
 	default:
 		return new(help)
 	}
