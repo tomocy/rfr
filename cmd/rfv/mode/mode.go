@@ -32,6 +32,7 @@ type OnHTTP struct {
 func (r *OnHTTP) Run() error {
 	r.register()
 
+	log.Printf("listen and serve on %s", r.addr)
 	if err := http.ListenAndServe(r.addr, r.router); err != nil {
 		return fmt.Errorf("failed to listen and serve: %s", err)
 	}
