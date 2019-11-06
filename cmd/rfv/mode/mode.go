@@ -69,6 +69,14 @@ func (r *OnHTTP) fetch(w http.ResponseWriter, req *http.Request) {
 	r.printer.Print(w, e)
 }
 
+func NewOnGRPC(addr string) *OnGRPC {
+	return &OnGRPC{
+		addr:    addr,
+		server:  *grpc.NewServer(),
+		usecase: *app.NewEntryUsecase(new(infra.ViaHTTP)),
+	}
+}
+
 type OnGRPC struct {
 	pb.UnimplementedEntryRepoServer
 	addr    string
