@@ -35,7 +35,7 @@ type OnHTTP struct {
 func (r *OnHTTP) Run() error {
 	r.register()
 
-	logf("listen and serve on %s", r.addr)
+	r.logf("listen and serve on %s", r.addr)
 	if err := http.ListenAndServe(r.addr, r.router); err != nil {
 		return fmt.Errorf("failed to listen and serve: %s", err)
 	}
@@ -67,6 +67,10 @@ func (r *OnHTTP) fetch(w http.ResponseWriter, req *http.Request) {
 	}
 
 	r.printer.Print(w, e)
+}
+
+func (r *OnHTTP) logf(format string, as ...interface{}) {
+	logf(fmt.Sprintf("http: %s", format), as...)
 }
 
 func NewOnGRPC(addr string) *OnGRPC {
