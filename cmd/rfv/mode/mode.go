@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/tomocy/chi"
@@ -32,7 +31,7 @@ type OnHTTP struct {
 func (r *OnHTTP) Run() error {
 	r.register()
 
-	log.Printf("listen and serve on %s", r.addr)
+	logf("listen and serve on %s", r.addr)
 	if err := http.ListenAndServe(r.addr, r.router); err != nil {
 		return fmt.Errorf("failed to listen and serve: %s", err)
 	}
@@ -48,7 +47,6 @@ func (r *OnHTTP) register() {
 func (r *OnHTTP) fetchIndex(w http.ResponseWriter, _ *http.Request) {
 	idx, err := r.usecase.FetchIndex(context.Background())
 	if err != nil {
-		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -60,7 +58,6 @@ func (r *OnHTTP) fetch(w http.ResponseWriter, req *http.Request) {
 	id := chi.URLParam(req, "id")
 	e, err := r.usecase.Fetch(context.Background(), id)
 	if err != nil {
-		log.Println(err)
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
