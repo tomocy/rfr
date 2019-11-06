@@ -10,6 +10,8 @@ import (
 	"github.com/tomocy/rfv/app"
 	"github.com/tomocy/rfv/domain"
 	"github.com/tomocy/rfv/infra"
+	pb "github.com/tomocy/rfv/infra/rpc/rfv"
+	"google.golang.org/grpc"
 )
 
 func NewOnHTTP(addr string, printer Printer) *OnHTTP {
@@ -63,6 +65,13 @@ func (r *OnHTTP) fetch(w http.ResponseWriter, req *http.Request) {
 	}
 
 	r.printer.Print(w, e)
+}
+
+type OnGRPC struct {
+	pb.UnimplementedEntryRepoServer
+	addr    string
+	server  grpc.Server
+	usecase app.EntryUsecase
 }
 
 type Printer interface {
