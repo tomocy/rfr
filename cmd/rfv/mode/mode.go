@@ -87,7 +87,7 @@ type OnGRPC struct {
 func (r *OnGRPC) Run() error {
 	pb.RegisterEntryRepoServer(&r.server, r)
 
-	logf("listen and serve on %s", r.addr)
+	r.logf("listen and serve on %s", r.addr)
 	if err := r.listenAndServe(); err != nil {
 		return fmt.Errorf("failed to listen and serve: %s", err)
 	}
@@ -133,6 +133,10 @@ func (r *OnGRPC) convert(e *domain.Entry) *pb.Entry {
 	return &pb.Entry{
 		Id: e.ID, Title: e.Title,
 	}
+}
+
+func (r *OnGRPC) logf(format string, as ...interface{}) {
+	logf(fmt.Sprintf("grpc: %s", format), as...)
 }
 
 type Printer interface {
