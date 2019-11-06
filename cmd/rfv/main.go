@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/tomocy/rfv/cmd/rfv/format"
@@ -20,20 +21,25 @@ func main() {
 func parseConfig() *config {
 	m, f := flag.String("m", "http", "mode"), flag.String("f", "json", "format")
 	addr := flag.String("addr", ":80", "address")
+	log := flag.String("log", "", "log level")
 	flag.Parse()
 
 	return &config{
 		mode: *m, format: *f,
 		addr: *addr,
+		log:  *log,
 	}
 }
 
 type config struct {
 	mode, format string
 	addr         string
+	log          string
 }
 
 func (c *config) newRunner() runner {
+	c.setLogger()
+
 	switch c.mode {
 	case modeHTTP:
 		return mode.NewOnHTTP(c.addr, c.newPrinter())
@@ -41,6 +47,15 @@ func (c *config) newRunner() runner {
 		return new(help)
 	}
 }
+
+func (c *config) setLogger() {
+	switch c.log {
+	case logDebug:
+		mode.Logger = log.New(os.Stdout, "", log.LstdFlags)
+	}
+}
+
+const logDebug = "debug"
 
 const modeHTTP = "http"
 
