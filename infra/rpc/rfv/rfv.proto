@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package rfv;
+
+import "google/protobuf/empty.proto";
+
+service EntryRepo {
+    rpc FetchIndex (google.protobuf.Empty) returns (Entries) {}
+    rpc Fetch(FetchRequest) returns (Entry) {}
+}
+
+message FetchRequest {
+    string id = 1;
+}
+
+message Entries {
+    repeated Entry entries = 1;
+}
+
+message Entry {
+    string id = 1;
+    string title = 2;
+}
