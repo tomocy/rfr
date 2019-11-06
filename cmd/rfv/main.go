@@ -43,6 +43,8 @@ func (c *config) newRunner() runner {
 	switch c.mode {
 	case modeHTTP:
 		return mode.NewOnHTTP(c.addr, c.newPrinter())
+	case modeGRPC:
+		return mode.NewOnGRPC(c.addr)
 	default:
 		return new(help)
 	}
@@ -57,7 +59,10 @@ func (c *config) setLogger() {
 
 const logDebug = "debug"
 
-const modeHTTP = "http"
+const (
+	modeHTTP = "http"
+	modeGRPC = "grpc"
+)
 
 func (c *config) newPrinter() mode.Printer {
 	switch c.format {
