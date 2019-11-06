@@ -72,3 +72,17 @@ type Printer interface {
 	PrintIndex(io.Writer, []domain.Entry)
 	Print(io.Writer, *domain.Entry)
 }
+
+func logf(format string, as ...interface{}) {
+	if Logger == nil {
+		return
+	}
+
+	Logger.Printf(format, as...)
+}
+
+var Logger logger
+
+type logger interface {
+	Printf(string, ...interface{})
+}
