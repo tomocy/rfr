@@ -10,6 +10,13 @@ import (
 	"github.com/tomocy/rfv/cmd/rfv/mode"
 )
 
+func init() {
+	flag.Usage = func() {
+		fmt.Fprintln(os.Stderr, "Usage of rfv:")
+		flag.PrintDefaults()
+	}
+}
+
 func main() {
 	cnf := parseConfig()
 	if err := cnf.newRunner().Run(); err != nil {
