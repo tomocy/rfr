@@ -7,8 +7,8 @@ import (
 	"net"
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"github.com/golang/protobuf/ptypes/empty"
-	"github.com/tomocy/chi"
 	"github.com/tomocy/rfv/app"
 	"github.com/tomocy/rfv/domain"
 	"github.com/tomocy/rfv/infra"
