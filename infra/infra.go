@@ -3,14 +3,14 @@ package infra
 import (
 	"context"
 
-	"github.com/tomocy/rff"
 	"github.com/tomocy/rfv/domain"
+	rfcPkg "github.com/tomocy/rfv/infra/rfc"
 )
 
 type ViaHTTP struct{}
 
 func (r *ViaHTTP) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
-	idx, err := rff.HTTPClient.FetchIndex(ctx)
+	idx, err := rfcPkg.HTTPClient.FetchIndex(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +20,7 @@ func (r *ViaHTTP) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
 }
 
 func (r *ViaHTTP) Fetch(ctx context.Context, id string) (*domain.Entry, error) {
-	e, err := rff.HTTPClient.Fetch(ctx, id)
+	e, err := rfcPkg.HTTPClient.Fetch(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func (r *ViaHTTP) Fetch(ctx context.Context, id string) (*domain.Entry, error) {
 	return converted.adapt(), nil
 }
 
-type index rff.Index
+type index rfcPkg.Index
 
 func (i *index) adapt() []domain.Entry {
 	es := make([]domain.Entry, len(i.RFCs))
@@ -41,7 +41,7 @@ func (i *index) adapt() []domain.Entry {
 	return es
 }
 
-type entry rff.Entry
+type entry rfcPkg.Entry
 
 func (e *entry) adapt() *domain.Entry {
 	return &domain.Entry{
@@ -49,7 +49,7 @@ func (e *entry) adapt() *domain.Entry {
 	}
 }
 
-type rfc rff.RFC
+type rfc rfcPkg.RFC
 
 func (r *rfc) adapt() *domain.Entry {
 	return &domain.Entry{
