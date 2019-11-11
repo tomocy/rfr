@@ -45,6 +45,8 @@ type Fetcher interface {
 	Fetch(context.Context, string) (io.ReadCloser, error)
 }
 
+type viaHTTP struct{}
+
 type Index struct {
 	RFCs []Entry `xml:"rfc-entry"`
 }
