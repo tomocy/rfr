@@ -8,6 +8,10 @@ import (
 	"net/http"
 )
 
+var HTTPClient = &Client{
+	Fetcher: new(viaHTTP),
+}
+
 type Client struct {
 	Fetcher Fetcher
 }
