@@ -5,6 +5,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"io"
+	"net/http"
 )
 
 type Client struct {
@@ -46,6 +47,20 @@ type Fetcher interface {
 }
 
 type viaHTTP struct{}
+
+func (f *viaHTTP) Fetch(ctx context.Context, uri string) (io.ReadCloser, error) {
+	r, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("https:%s", uri), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := http.DefaultClient.Do(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Body, nil
+}
 
 type Index struct {
 	RFCs []Entry `xml:"rfc-entry"`
