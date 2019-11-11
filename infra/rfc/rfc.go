@@ -5,6 +5,10 @@ import (
 	"io"
 )
 
+type Client struct {
+	Fetcher Fetcher
+}
+
 type Fetcher interface {
 	Fetch(context.Context, string) (io.ReadCloser, error)
 }
