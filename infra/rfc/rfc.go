@@ -26,6 +26,21 @@ func (c *Client) FetchIndex(ctx context.Context) (*Index, error) {
 	return index, nil
 }
 
+func (c *Client) Fetch(ctx context.Context, id string) (*RFC, error) {
+	fetched, err := c.Fetcher.Fetch(ctx, fmt.Sprintf("//www.rfc-editor.org/rfc/%s.xml", id))
+	if err != nil {
+		return nil, err
+	}
+	defer fetched.Close()
+
+	rfc := new(RFC)
+	if err := xml.NewDecoder(fetched).Decode(rfc); err != nil {
+		return nil, fmt.Errorf("failed to decode: %s", err)
+	}
+
+	return rfc, nil
+}
+
 type Fetcher interface {
 	Fetch(context.Context, string) (io.ReadCloser, error)
 }
