@@ -1,5 +1,14 @@
 package rfc
 
+import (
+	"context"
+	"io"
+)
+
+type Fetcher interface {
+	Fetch(context.Context, string) (io.ReadCloser, error)
+}
+
 type Index struct {
 	RFCs []Entry `xml:"rfc-entry"`
 }
