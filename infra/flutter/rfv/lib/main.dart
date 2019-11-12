@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:grpc/grpc.dart';
+import 'package:rfv/infra/rpc/rfv/google/protobuf/empty.pb.dart';
+import 'infra/rpc/rfv/rfv.pbgrpc.dart';
 
 void main() => runApp(RFV());
 
@@ -89,9 +92,38 @@ class MockFetcher implements Fetcher {
   }
 }
 
+class GRPCFetcher implements Fetcher {
+  GRPCFetcher(String host, int port) {
+    _client = EntryRepoClient(ClientChannel(
+        host,
+        port: port,
+        options: ChannelOptions(credentials: ChannelCredentials.insecure()),
+    ));
+  }
+
+  EntryRepoClient _client;
+
+  Future<List<RFC>> fetchIndex() async {
+    Entries entries = await _client.fetchIndex(Empty());
+    return entries.entries.map((Entry entry) => RFC.fromEntry(entry));
+  }
+
+  Future<RFC> fetch(String id) async {
+    Entry entry = await _client.fetch(FetchRequest()..id = id);
+    return RFC.fromEntry(entry);
+  }
+}
+
 class RFC {
   RFC(this.id, this.title);
 
   String id;
   String title;
+
+  factory RFC.fromEntry(Entry entry) {
+    return RFC(
+      entry.id,
+      entry.title,
+    );
+  }
 }
