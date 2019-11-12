@@ -110,6 +110,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+abstract class Fetcher {
+  Future<List<RFC>> fetchIndex();
+  Future<RFC> fetch(String id);
+}
+
 class RFC {
   RFC(this.id, this.title);
 
