@@ -24,7 +24,7 @@ class IndexPage extends StatefulWidget {
 
   final String title;
 
-  _IndexPageState createState() => _IndexPageState(MockFetcher());
+  _IndexPageState createState() => _IndexPageState(GRPCFetcher('localhost', 8080));
 }
 
 class _IndexPageState extends State<IndexPage> {
