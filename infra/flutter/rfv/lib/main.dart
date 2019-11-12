@@ -109,3 +109,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+class RFC {
+  RFC(this.id, this.title);
+
+  String id;
+  String title;
+}
