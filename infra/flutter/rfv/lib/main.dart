@@ -68,8 +68,18 @@ class _IndexPageState extends State<IndexPage> {
     return MergeSemantics(child: ListTile(
         isThreeLine: true,
         title: Text('${rfc.id} ${rfc.title}'),
-        subtitle: Text(rfc.title)
-    ));
+        subtitle: Text(rfc.title),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (BuildContext context) => SinglePage(
+              title: rfc.id,
+              fetcher: _fetcher,
+            )),
+          );
+        },
+      )
+    );
   }
 }
 
@@ -92,7 +102,7 @@ class _SinglePageState extends State<SinglePage> {
   @override
   initState() {
     super.initState();
-    _rfc = _fetcher.fetch(widget.title);
+    _rfc = _fetcher.fetch(widget.title.toLowerCase());
   }
 
   @override
