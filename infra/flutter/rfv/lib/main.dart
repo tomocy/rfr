@@ -73,6 +73,63 @@ class _IndexPageState extends State<IndexPage> {
   }
 }
 
+class SinglePage extends StatefulWidget {
+  SinglePage({Key key, this.title, this.fetcher}) : super(key: key);
+
+  final String title;
+  final Fetcher fetcher;
+
+  @override
+  _SinglePageState createState() => _SinglePageState(this.fetcher);
+}
+
+class _SinglePageState extends State<SinglePage> {
+  _SinglePageState(this._fetcher);
+
+  final Fetcher _fetcher;
+  Future<RFC> _rfc;
+
+  @override
+  initState() {
+    super.initState();
+    _rfc = _fetcher.fetch(widget.title);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: FutureBuilder(
+        future: _rfc,
+        builder: (BuildContext context, AsyncSnapshot<RFC> snapshot) {
+          if (snapshot.hasData) {
+            return Padding(
+              padding: const EdgeInsets.all(NavigationToolbar.kMiddleSpacing),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    snapshot.data.title,
+                    style: Theme.of(context).textTheme.title,
+                  ),
+                ],
+              ),
+            );
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text(snapshot.error.toString()));
+          }
+
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
 abstract class Fetcher {
   Future<List<RFC>> fetchIndex();
   Future<RFC> fetch(String id);
