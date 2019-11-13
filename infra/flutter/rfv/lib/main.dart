@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:grpc/grpc.dart';
 import 'package:rfv/infra/rpc/rfv/google/protobuf/empty.pb.dart';
+import 'package:http/http.dart' as http;
 import 'infra/rpc/rfv/rfv.pbgrpc.dart';
 
 void main() => runApp(RFV());
@@ -24,7 +26,7 @@ class IndexPage extends StatefulWidget {
 
   final String title;
 
-  _IndexPageState createState() => _IndexPageState(GRPCFetcher('localhost', 8080));
+  _IndexPageState createState() => _IndexPageState(HTTPFetcher('localhost', 8080));
 }
 
 class _IndexPageState extends State<IndexPage> {
@@ -114,6 +116,41 @@ class GRPCFetcher implements Fetcher {
   }
 }
 
+class HTTPFetcher implements Fetcher {
+  HTTPFetcher(this._host, this._port);
+
+  final String _host;
+  final int _port;
+
+  Future<List<RFC>> fetchIndex() async {
+    final http.Response response = await http.get(_endpoint());
+    if (400 <= response.statusCode) {
+      throw Exception(response.reasonPhrase);
+    }
+    
+    final List<Map<String, dynamic>> decoded = (json.decode(response.body) as List<dynamic>).cast<Map<String, dynamic>>();
+    return decoded.map((Map<String, dynamic> rfc) => RFC.fromJSON(rfc)).toList();
+  }
+
+  Future<RFC> fetch(String id) async {
+    final http.Response response = await http.get(_endpoint([id]));
+    if (400 <= response.statusCode) {
+      throw Exception(response.reasonPhrase);
+    }
+
+    return RFC.fromJSON(json.decode(response.body));
+  }
+
+  String _endpoint([List<String> paths]) {
+    final String joined = paths?.reduce((curr, next) => '$curr/$next') ?? '';
+    return 'http://${_address()}/$joined';
+  }
+
+  String _address() {
+    return '$_host:$_port';
+  }
+}
+
 class RFC {
   RFC(this.id, this.title);
 
@@ -124,6 +161,13 @@ class RFC {
     return RFC(
       entry.id,
       entry.title,
+    );
+  }
+
+  factory RFC.fromJSON(Map<String, dynamic> json) {
+    return RFC(
+      json['id'],
+      json['title'],
     );
   }
 }
