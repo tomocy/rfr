@@ -69,6 +69,10 @@ func (r *InXML) convertRFC(raw *rfcxml.RFC) *rfc.RFC {
 	}
 }
 
+type InHTML struct {
+	Fetcher Fetcher
+}
+
 type Fetcher interface {
 	Fetch(context.Context, string) (io.ReadCloser, error)
 }
