@@ -6,20 +6,20 @@ import (
 	"github.com/tomocy/rfv/domain"
 )
 
-func NewEntryUsecase(repo domain.EntryRepo) *EntryUsecase {
-	return &EntryUsecase{
+func NewRFCUsecase(repo domain.RFCRepo) *RFCUsecase {
+	return &RFCUsecase{
 		repo: repo,
 	}
 }
 
-type EntryUsecase struct {
-	repo domain.EntryRepo
+type RFCUsecase struct {
+	repo domain.RFCRepo
 }
 
-func (u *EntryUsecase) FetchIndex(ctx context.Context) ([]domain.Entry, error) {
-	return u.repo.FetchIndex(ctx)
+func (u *RFCUsecase) Get(ctx context.Context) ([]*domain.RFC, error) {
+	return u.repo.Get(ctx)
 }
 
-func (u *EntryUsecase) Fetch(ctx context.Context, id string) (*domain.Entry, error) {
-	return u.repo.Fetch(ctx, id)
+func (u *RFCUsecase) Find(ctx context.Context, id int) (*domain.RFC, error) {
+	return u.repo.Find(ctx, id)
 }

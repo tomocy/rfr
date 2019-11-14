@@ -25,125 +25,125 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type FetchRequest struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+type FindRequest struct {
+	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *FetchRequest) Reset()         { *m = FetchRequest{} }
-func (m *FetchRequest) String() string { return proto.CompactTextString(m) }
-func (*FetchRequest) ProtoMessage()    {}
-func (*FetchRequest) Descriptor() ([]byte, []int) {
+func (m *FindRequest) Reset()         { *m = FindRequest{} }
+func (m *FindRequest) String() string { return proto.CompactTextString(m) }
+func (*FindRequest) ProtoMessage()    {}
+func (*FindRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a93b2c1ab53e9c0f, []int{0}
 }
 
-func (m *FetchRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_FetchRequest.Unmarshal(m, b)
+func (m *FindRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_FindRequest.Unmarshal(m, b)
 }
-func (m *FetchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_FetchRequest.Marshal(b, m, deterministic)
+func (m *FindRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_FindRequest.Marshal(b, m, deterministic)
 }
-func (m *FetchRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FetchRequest.Merge(m, src)
+func (m *FindRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_FindRequest.Merge(m, src)
 }
-func (m *FetchRequest) XXX_Size() int {
-	return xxx_messageInfo_FetchRequest.Size(m)
+func (m *FindRequest) XXX_Size() int {
+	return xxx_messageInfo_FindRequest.Size(m)
 }
-func (m *FetchRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_FetchRequest.DiscardUnknown(m)
+func (m *FindRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_FindRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_FetchRequest proto.InternalMessageInfo
+var xxx_messageInfo_FindRequest proto.InternalMessageInfo
 
-func (m *FetchRequest) GetId() string {
+func (m *FindRequest) GetId() int32 {
 	if m != nil {
 		return m.Id
 	}
-	return ""
+	return 0
 }
 
-type Entries struct {
-	Entries              []*Entry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
+type RFCs struct {
+	Rfcs                 []*RFC   `protobuf:"bytes,1,rep,name=rfcs,proto3" json:"rfcs,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Entries) Reset()         { *m = Entries{} }
-func (m *Entries) String() string { return proto.CompactTextString(m) }
-func (*Entries) ProtoMessage()    {}
-func (*Entries) Descriptor() ([]byte, []int) {
+func (m *RFCs) Reset()         { *m = RFCs{} }
+func (m *RFCs) String() string { return proto.CompactTextString(m) }
+func (*RFCs) ProtoMessage()    {}
+func (*RFCs) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a93b2c1ab53e9c0f, []int{1}
 }
 
-func (m *Entries) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Entries.Unmarshal(m, b)
+func (m *RFCs) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RFCs.Unmarshal(m, b)
 }
-func (m *Entries) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Entries.Marshal(b, m, deterministic)
+func (m *RFCs) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RFCs.Marshal(b, m, deterministic)
 }
-func (m *Entries) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Entries.Merge(m, src)
+func (m *RFCs) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RFCs.Merge(m, src)
 }
-func (m *Entries) XXX_Size() int {
-	return xxx_messageInfo_Entries.Size(m)
+func (m *RFCs) XXX_Size() int {
+	return xxx_messageInfo_RFCs.Size(m)
 }
-func (m *Entries) XXX_DiscardUnknown() {
-	xxx_messageInfo_Entries.DiscardUnknown(m)
+func (m *RFCs) XXX_DiscardUnknown() {
+	xxx_messageInfo_RFCs.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Entries proto.InternalMessageInfo
+var xxx_messageInfo_RFCs proto.InternalMessageInfo
 
-func (m *Entries) GetEntries() []*Entry {
+func (m *RFCs) GetRfcs() []*RFC {
 	if m != nil {
-		return m.Entries
+		return m.Rfcs
 	}
 	return nil
 }
 
-type Entry struct {
-	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+type RFC struct {
+	Id                   int32    `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Title                string   `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *Entry) Reset()         { *m = Entry{} }
-func (m *Entry) String() string { return proto.CompactTextString(m) }
-func (*Entry) ProtoMessage()    {}
-func (*Entry) Descriptor() ([]byte, []int) {
+func (m *RFC) Reset()         { *m = RFC{} }
+func (m *RFC) String() string { return proto.CompactTextString(m) }
+func (*RFC) ProtoMessage()    {}
+func (*RFC) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a93b2c1ab53e9c0f, []int{2}
 }
 
-func (m *Entry) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_Entry.Unmarshal(m, b)
+func (m *RFC) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RFC.Unmarshal(m, b)
 }
-func (m *Entry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_Entry.Marshal(b, m, deterministic)
+func (m *RFC) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RFC.Marshal(b, m, deterministic)
 }
-func (m *Entry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Entry.Merge(m, src)
+func (m *RFC) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RFC.Merge(m, src)
 }
-func (m *Entry) XXX_Size() int {
-	return xxx_messageInfo_Entry.Size(m)
+func (m *RFC) XXX_Size() int {
+	return xxx_messageInfo_RFC.Size(m)
 }
-func (m *Entry) XXX_DiscardUnknown() {
-	xxx_messageInfo_Entry.DiscardUnknown(m)
+func (m *RFC) XXX_DiscardUnknown() {
+	xxx_messageInfo_RFC.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Entry proto.InternalMessageInfo
+var xxx_messageInfo_RFC proto.InternalMessageInfo
 
-func (m *Entry) GetId() string {
+func (m *RFC) GetId() int32 {
 	if m != nil {
 		return m.Id
 	}
-	return ""
+	return 0
 }
 
-func (m *Entry) GetTitle() string {
+func (m *RFC) GetTitle() string {
 	if m != nil {
 		return m.Title
 	}
@@ -151,29 +151,29 @@ func (m *Entry) GetTitle() string {
 }
 
 func init() {
-	proto.RegisterType((*FetchRequest)(nil), "rfv.FetchRequest")
-	proto.RegisterType((*Entries)(nil), "rfv.Entries")
-	proto.RegisterType((*Entry)(nil), "rfv.Entry")
+	proto.RegisterType((*FindRequest)(nil), "rfv.FindRequest")
+	proto.RegisterType((*RFCs)(nil), "rfv.RFCs")
+	proto.RegisterType((*RFC)(nil), "rfv.RFC")
 }
 
 func init() { proto.RegisterFile("rfv.proto", fileDescriptor_a93b2c1ab53e9c0f) }
 
 var fileDescriptor_a93b2c1ab53e9c0f = []byte{
-	// 212 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0x8f, 0xd1, 0x4a, 0x86, 0x40,
-	0x10, 0x85, 0x7f, 0xfd, 0x31, 0x71, 0x92, 0xa0, 0x21, 0x42, 0x0c, 0x42, 0x96, 0x2e, 0xbc, 0x69,
-	0x05, 0xeb, 0x15, 0x0c, 0xba, 0xf5, 0x11, 0xcc, 0xd1, 0x96, 0xcc, 0xb5, 0x75, 0x95, 0x7c, 0xfb,
-	0xd8, 0x5d, 0x0c, 0xf9, 0xef, 0x76, 0xcf, 0x99, 0x39, 0xe7, 0x1b, 0x88, 0x54, 0xb7, 0xf2, 0x49,
-	0x49, 0x2d, 0xf1, 0xac, 0xba, 0x35, 0x7d, 0xe8, 0xa5, 0xec, 0x07, 0x2a, 0xac, 0xd4, 0x2c, 0x5d,
-	0x41, 0xdf, 0x93, 0xde, 0xdc, 0x04, 0x7b, 0x84, 0xf8, 0x8d, 0xf4, 0xc7, 0x67, 0x4d, 0x3f, 0x0b,
-	0xcd, 0x1a, 0x6f, 0xc0, 0x17, 0x6d, 0xe2, 0x65, 0x5e, 0x1e, 0xd5, 0xbe, 0x68, 0x59, 0x01, 0x61,
-	0x35, 0x6a, 0x25, 0x68, 0xc6, 0x27, 0x08, 0xc9, 0x3d, 0x13, 0x2f, 0x3b, 0xe7, 0xd7, 0x25, 0x70,
-	0xd3, 0x64, 0xec, 0xad, 0xde, 0x2d, 0xf6, 0x0c, 0x81, 0x55, 0x2e, 0x93, 0xf0, 0x0e, 0x02, 0x2d,
-	0xf4, 0x40, 0x89, 0x6f, 0x25, 0xf7, 0x29, 0xbf, 0x20, 0x72, 0x01, 0x34, 0x49, 0x7c, 0x05, 0xb0,
-	0x30, 0xef, 0x63, 0x4b, 0xbf, 0x78, 0xcf, 0x1d, 0x38, 0xdf, 0xc1, 0x79, 0x65, 0xc0, 0xd3, 0xf8,
-	0xbf, 0xd6, 0xf4, 0x9d, 0x30, 0x87, 0xc0, 0x6e, 0xe1, 0xad, 0x35, 0x8e, 0xe7, 0xa4, 0x07, 0x44,
-	0x76, 0x6a, 0xae, 0x6c, 0xd2, 0xcb, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4d, 0x2b, 0x38, 0x0c,
-	0x22, 0x01, 0x00, 0x00,
+	// 210 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x5c, 0xce, 0x51, 0x4b, 0xc3, 0x30,
+	0x14, 0x05, 0xe0, 0xa5, 0xe9, 0xd4, 0xde, 0x81, 0xc8, 0x45, 0xa4, 0x54, 0x85, 0x12, 0xf6, 0x50,
+	0x14, 0x32, 0x98, 0x3f, 0xa1, 0x18, 0xdf, 0xf3, 0xea, 0xdb, 0x6c, 0x52, 0x02, 0xd5, 0xd4, 0x24,
+	0x2d, 0xf8, 0xef, 0x25, 0x29, 0x15, 0xd9, 0x63, 0x0e, 0x39, 0xf7, 0x7c, 0x50, 0x38, 0x3d, 0xf3,
+	0xd1, 0xd9, 0x60, 0x91, 0x3a, 0x3d, 0x57, 0xf7, 0xbd, 0xb5, 0xfd, 0xa0, 0x0e, 0x29, 0x3a, 0x4d,
+	0xfa, 0xa0, 0x3e, 0xc7, 0xf0, 0xb3, 0xfc, 0x60, 0x8f, 0xb0, 0x13, 0xe6, 0xab, 0x93, 0xea, 0x7b,
+	0x52, 0x3e, 0xe0, 0x35, 0x64, 0xa6, 0x2b, 0x49, 0x4d, 0x9a, 0xad, 0xcc, 0x4c, 0xc7, 0xf6, 0x90,
+	0x4b, 0xd1, 0x7a, 0x7c, 0x80, 0xdc, 0xe9, 0x0f, 0x5f, 0x92, 0x9a, 0x36, 0xbb, 0xe3, 0x15, 0x8f,
+	0x13, 0x52, 0xb4, 0x32, 0xa5, 0xec, 0x19, 0xa8, 0x14, 0xed, 0x79, 0x19, 0x6f, 0x61, 0x1b, 0x4c,
+	0x18, 0x54, 0x99, 0xd5, 0xa4, 0x29, 0xe4, 0xf2, 0x38, 0xbe, 0xc3, 0x65, 0x6c, 0xaa, 0xd1, 0xe2,
+	0x13, 0xd0, 0x37, 0x15, 0xf0, 0x8e, 0x2f, 0x42, 0xbe, 0x0a, 0xf9, 0x6b, 0x14, 0x56, 0xc5, 0x3a,
+	0xe3, 0xd9, 0x06, 0xf7, 0x90, 0x47, 0x28, 0xde, 0xa4, 0xf0, 0x9f, 0xb9, 0xfa, 0xd3, 0xb0, 0xcd,
+	0xe9, 0x22, 0x9d, 0x78, 0xf9, 0x0d, 0x00, 0x00, 0xff, 0xff, 0xb3, 0x91, 0xbf, 0x67, 0x04, 0x01,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -184,108 +184,108 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// EntryRepoClient is the client API for EntryRepo service.
+// RFCRepoClient is the client API for RFCRepo service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type EntryRepoClient interface {
-	FetchIndex(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Entries, error)
-	Fetch(ctx context.Context, in *FetchRequest, opts ...grpc.CallOption) (*Entry, error)
+type RFCRepoClient interface {
+	Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*RFCs, error)
+	Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*RFC, error)
 }
 
-type entryRepoClient struct {
+type rFCRepoClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewEntryRepoClient(cc *grpc.ClientConn) EntryRepoClient {
-	return &entryRepoClient{cc}
+func NewRFCRepoClient(cc *grpc.ClientConn) RFCRepoClient {
+	return &rFCRepoClient{cc}
 }
 
-func (c *entryRepoClient) FetchIndex(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*Entries, error) {
-	out := new(Entries)
-	err := c.cc.Invoke(ctx, "/rfv.EntryRepo/FetchIndex", in, out, opts...)
+func (c *rFCRepoClient) Get(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*RFCs, error) {
+	out := new(RFCs)
+	err := c.cc.Invoke(ctx, "/rfv.RFCRepo/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *entryRepoClient) Fetch(ctx context.Context, in *FetchRequest, opts ...grpc.CallOption) (*Entry, error) {
-	out := new(Entry)
-	err := c.cc.Invoke(ctx, "/rfv.EntryRepo/Fetch", in, out, opts...)
+func (c *rFCRepoClient) Find(ctx context.Context, in *FindRequest, opts ...grpc.CallOption) (*RFC, error) {
+	out := new(RFC)
+	err := c.cc.Invoke(ctx, "/rfv.RFCRepo/Find", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// EntryRepoServer is the server API for EntryRepo service.
-type EntryRepoServer interface {
-	FetchIndex(context.Context, *empty.Empty) (*Entries, error)
-	Fetch(context.Context, *FetchRequest) (*Entry, error)
+// RFCRepoServer is the server API for RFCRepo service.
+type RFCRepoServer interface {
+	Get(context.Context, *empty.Empty) (*RFCs, error)
+	Find(context.Context, *FindRequest) (*RFC, error)
 }
 
-// UnimplementedEntryRepoServer can be embedded to have forward compatible implementations.
-type UnimplementedEntryRepoServer struct {
+// UnimplementedRFCRepoServer can be embedded to have forward compatible implementations.
+type UnimplementedRFCRepoServer struct {
 }
 
-func (*UnimplementedEntryRepoServer) FetchIndex(ctx context.Context, req *empty.Empty) (*Entries, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FetchIndex not implemented")
+func (*UnimplementedRFCRepoServer) Get(ctx context.Context, req *empty.Empty) (*RFCs, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
 }
-func (*UnimplementedEntryRepoServer) Fetch(ctx context.Context, req *FetchRequest) (*Entry, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Fetch not implemented")
-}
-
-func RegisterEntryRepoServer(s *grpc.Server, srv EntryRepoServer) {
-	s.RegisterService(&_EntryRepo_serviceDesc, srv)
+func (*UnimplementedRFCRepoServer) Find(ctx context.Context, req *FindRequest) (*RFC, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Find not implemented")
 }
 
-func _EntryRepo_FetchIndex_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func RegisterRFCRepoServer(s *grpc.Server, srv RFCRepoServer) {
+	s.RegisterService(&_RFCRepo_serviceDesc, srv)
+}
+
+func _RFCRepo_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(empty.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EntryRepoServer).FetchIndex(ctx, in)
+		return srv.(RFCRepoServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rfv.EntryRepo/FetchIndex",
+		FullMethod: "/rfv.RFCRepo/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EntryRepoServer).FetchIndex(ctx, req.(*empty.Empty))
+		return srv.(RFCRepoServer).Get(ctx, req.(*empty.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EntryRepo_Fetch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FetchRequest)
+func _RFCRepo_Find_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EntryRepoServer).Fetch(ctx, in)
+		return srv.(RFCRepoServer).Find(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rfv.EntryRepo/Fetch",
+		FullMethod: "/rfv.RFCRepo/Find",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EntryRepoServer).Fetch(ctx, req.(*FetchRequest))
+		return srv.(RFCRepoServer).Find(ctx, req.(*FindRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-var _EntryRepo_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "rfv.EntryRepo",
-	HandlerType: (*EntryRepoServer)(nil),
+var _RFCRepo_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "rfv.RFCRepo",
+	HandlerType: (*RFCRepoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "FetchIndex",
-			Handler:    _EntryRepo_FetchIndex_Handler,
+			MethodName: "Get",
+			Handler:    _RFCRepo_Get_Handler,
 		},
 		{
-			MethodName: "Fetch",
-			Handler:    _EntryRepo_Fetch_Handler,
+			MethodName: "Find",
+			Handler:    _RFCRepo_Find_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

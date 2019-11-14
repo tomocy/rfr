@@ -9,88 +9,88 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-class FetchRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('FetchRequest', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
-    ..aOS(1, 'id')
+class FindRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('FindRequest', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
+    ..a<$core.int>(1, 'id', $pb.PbFieldType.O3)
     ..hasRequiredFields = false
   ;
 
-  FetchRequest._() : super();
-  factory FetchRequest() => create();
-  factory FetchRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory FetchRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  FetchRequest clone() => FetchRequest()..mergeFromMessage(this);
-  FetchRequest copyWith(void Function(FetchRequest) updates) => super.copyWith((message) => updates(message as FetchRequest));
+  FindRequest._() : super();
+  factory FindRequest() => create();
+  factory FindRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory FindRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  FindRequest clone() => FindRequest()..mergeFromMessage(this);
+  FindRequest copyWith(void Function(FindRequest) updates) => super.copyWith((message) => updates(message as FindRequest));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static FetchRequest create() => FetchRequest._();
-  FetchRequest createEmptyInstance() => create();
-  static $pb.PbList<FetchRequest> createRepeated() => $pb.PbList<FetchRequest>();
+  static FindRequest create() => FindRequest._();
+  FindRequest createEmptyInstance() => create();
+  static $pb.PbList<FindRequest> createRepeated() => $pb.PbList<FindRequest>();
   @$core.pragma('dart2js:noInline')
-  static FetchRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FetchRequest>(create);
-  static FetchRequest _defaultInstance;
+  static FindRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<FindRequest>(create);
+  static FindRequest _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.int get id => $_getIZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set id($core.int v) { $_setSignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => clearField(1);
 }
 
-class Entries extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Entries', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
-    ..pc<Entry>(1, 'entries', $pb.PbFieldType.PM, subBuilder: Entry.create)
+class RFCs extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('RFCs', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
+    ..pc<RFC>(1, 'rfcs', $pb.PbFieldType.PM, subBuilder: RFC.create)
     ..hasRequiredFields = false
   ;
 
-  Entries._() : super();
-  factory Entries() => create();
-  factory Entries.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Entries.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  Entries clone() => Entries()..mergeFromMessage(this);
-  Entries copyWith(void Function(Entries) updates) => super.copyWith((message) => updates(message as Entries));
+  RFCs._() : super();
+  factory RFCs() => create();
+  factory RFCs.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RFCs.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  RFCs clone() => RFCs()..mergeFromMessage(this);
+  RFCs copyWith(void Function(RFCs) updates) => super.copyWith((message) => updates(message as RFCs));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Entries create() => Entries._();
-  Entries createEmptyInstance() => create();
-  static $pb.PbList<Entries> createRepeated() => $pb.PbList<Entries>();
+  static RFCs create() => RFCs._();
+  RFCs createEmptyInstance() => create();
+  static $pb.PbList<RFCs> createRepeated() => $pb.PbList<RFCs>();
   @$core.pragma('dart2js:noInline')
-  static Entries getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Entries>(create);
-  static Entries _defaultInstance;
+  static RFCs getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RFCs>(create);
+  static RFCs _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<Entry> get entries => $_getList(0);
+  $core.List<RFC> get rfcs => $_getList(0);
 }
 
-class Entry extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Entry', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
-    ..aOS(1, 'id')
+class RFC extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('RFC', package: const $pb.PackageName('rfv'), createEmptyInstance: create)
+    ..a<$core.int>(1, 'id', $pb.PbFieldType.O3)
     ..aOS(2, 'title')
     ..hasRequiredFields = false
   ;
 
-  Entry._() : super();
-  factory Entry() => create();
-  factory Entry.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Entry.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  Entry clone() => Entry()..mergeFromMessage(this);
-  Entry copyWith(void Function(Entry) updates) => super.copyWith((message) => updates(message as Entry));
+  RFC._() : super();
+  factory RFC() => create();
+  factory RFC.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory RFC.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  RFC clone() => RFC()..mergeFromMessage(this);
+  RFC copyWith(void Function(RFC) updates) => super.copyWith((message) => updates(message as RFC));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Entry create() => Entry._();
-  Entry createEmptyInstance() => create();
-  static $pb.PbList<Entry> createRepeated() => $pb.PbList<Entry>();
+  static RFC create() => RFC._();
+  RFC createEmptyInstance() => create();
+  static $pb.PbList<RFC> createRepeated() => $pb.PbList<RFC>();
   @$core.pragma('dart2js:noInline')
-  static Entry getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Entry>(create);
-  static Entry _defaultInstance;
+  static RFC getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<RFC>(create);
+  static RFC _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.String get id => $_getSZ(0);
+  $core.int get id => $_getIZ(0);
   @$pb.TagNumber(1)
-  set id($core.String v) { $_setString(0, v); }
+  set id($core.int v) { $_setSignedInt32(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)

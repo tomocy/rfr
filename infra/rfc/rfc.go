@@ -25,7 +25,7 @@ type Repo interface {
 }
 
 type RFC struct {
-	ID    string
+	ID    int
 	Title string
 }
 

@@ -2,7 +2,7 @@ package domain
 
 import "context"
 
-type EntryRepo interface {
-	FetchIndex(context.Context) ([]Entry, error)
-	Fetch(context.Context, string) (*Entry, error)
+type RFCRepo interface {
+	Get(context.Context) ([]*RFC, error)
+	Find(context.Context, int) (*RFC, error)
 }

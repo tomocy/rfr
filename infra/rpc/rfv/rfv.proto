@@ -4,20 +4,20 @@ package rfv;
 
 import "google/protobuf/empty.proto";
 
-service EntryRepo {
-    rpc FetchIndex (google.protobuf.Empty) returns (Entries) {}
-    rpc Fetch(FetchRequest) returns (Entry) {}
+service RFCRepo {
+    rpc Get (google.protobuf.Empty) returns (RFCs) {}
+    rpc Find(FindRequest) returns (RFC) {}
 }
 
-message FetchRequest {
-    string id = 1;
+message FindRequest {
+    int32 id = 1;
 }
 
-message Entries {
-    repeated Entry entries = 1;
+message RFCs {
+    repeated RFC rfcs = 1;
 }
 
-message Entry {
-    string id = 1;
+message RFC {
+    int32 id = 1;
     string title = 2;
 }

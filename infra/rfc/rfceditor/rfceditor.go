@@ -3,7 +3,10 @@ package rfceditor
 import (
 	"context"
 	"encoding/xml"
+	"fmt"
 	"io"
+	"strconv"
+	"strings"
 
 	"github.com/tomocy/rfv/infra/rfc"
 	rfcxml "github.com/tomocy/rfv/infra/rfc/rfceditor/xml"
@@ -38,14 +41,15 @@ func (r *InXML) convertIndex(raw *rfcxml.Index) []*rfc.RFC {
 }
 
 func (r *InXML) convertEntry(raw *rfcxml.Entry) *rfc.RFC {
+	id, _ := strconv.Atoi(strings.TrimLeft(strings.ToLower(raw.ID), "rfc"))
 	return &rfc.RFC{
-		ID:    raw.ID,
+		ID:    id,
 		Title: raw.Title,
 	}
 }
 
 func (r *InXML) Find(ctx context.Context, id int) (*rfc.RFC, error) {
-	fetched, err := r.Fetcher.Fetch(ctx, "single.xml")
+	fetched, err := r.Fetcher.Fetch(ctx, fmt.Sprintf("//www.rfc-editor.org/rfc/rfc%d.xml", id))
 	if err != nil {
 		return nil, err
 	}

@@ -1,6 +1,6 @@
 package domain
 
-type Entry struct {
-	ID    string
+type RFC struct {
+	ID    int
 	Title string
 }

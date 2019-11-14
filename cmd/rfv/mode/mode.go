@@ -6,6 +6,7 @@ import (
 	"io"
 	"net"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi"
 	"github.com/golang/protobuf/ptypes/empty"
@@ -20,7 +21,7 @@ func NewOnHTTP(addr string, printer Printer) *OnHTTP {
 	return &OnHTTP{
 		addr:    addr,
 		router:  chi.NewRouter(),
-		usecase: *app.NewEntryUsecase(infra.NewViaHTTP()),
+		usecase: *app.NewRFCUsecase(infra.NewViaHTTP()),
 		printer: printer,
 	}
 }
@@ -28,7 +29,7 @@ func NewOnHTTP(addr string, printer Printer) *OnHTTP {
 type OnHTTP struct {
 	addr    string
 	router  chi.Router
-	usecase app.EntryUsecase
+	usecase app.RFCUsecase
 	printer Printer
 }
 
@@ -44,29 +45,40 @@ func (r *OnHTTP) Run() error {
 }
 
 func (r *OnHTTP) register() {
-	r.router.Get("/", r.fetchIndex)
-	r.router.Get("/{id}", r.fetch)
+	r.router.Get("/", r.get)
+	r.router.Get("/{id}", r.find)
 }
 
-func (r *OnHTTP) fetchIndex(w http.ResponseWriter, _ *http.Request) {
-	idx, err := r.usecase.FetchIndex(context.Background())
+func (r *OnHTTP) get(w http.ResponseWriter, _ *http.Request) {
+	got, err := r.usecase.Get(context.Background())
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	r.printer.PrintIndex(w, idx)
+	if err := r.printer.PrintAll(w, got); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
-func (r *OnHTTP) fetch(w http.ResponseWriter, req *http.Request) {
-	id := chi.URLParam(req, "id")
-	e, err := r.usecase.Fetch(context.Background(), id)
+func (r *OnHTTP) find(w http.ResponseWriter, req *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(req, "id"))
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	found, err := r.usecase.Find(context.Background(), id)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
-	r.printer.Print(w, e)
+	if err := r.printer.Print(w, found); err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
 }
 
 func (r *OnHTTP) logf(format string, as ...interface{}) {
@@ -77,19 +89,19 @@ func NewOnGRPC(addr string) *OnGRPC {
 	return &OnGRPC{
 		addr:    addr,
 		server:  *grpc.NewServer(),
-		usecase: *app.NewEntryUsecase(infra.NewViaHTTP()),
+		usecase: *app.NewRFCUsecase(infra.NewViaHTTP()),
 	}
 }
 
 type OnGRPC struct {
-	pb.UnimplementedEntryRepoServer
+	pb.UnimplementedRFCRepoServer
 	addr    string
 	server  grpc.Server
-	usecase app.EntryUsecase
+	usecase app.RFCUsecase
 }
 
 func (r *OnGRPC) Run() error {
-	pb.RegisterEntryRepoServer(&r.server, r)
+	pb.RegisterRFCRepoServer(&r.server, r)
 
 	r.logf("listen and serve on %s", r.addr)
 	if err := r.listenAndServe(); err != nil {
@@ -108,34 +120,35 @@ func (r *OnGRPC) listenAndServe() error {
 	return r.server.Serve(l)
 }
 
-func (r *OnGRPC) FetchIndex(ctx context.Context, req *empty.Empty) (*pb.Entries, error) {
-	idx, err := r.usecase.FetchIndex(ctx)
+func (r *OnGRPC) Get(ctx context.Context, req *empty.Empty) (*pb.RFCs, error) {
+	got, err := r.usecase.Get(ctx)
 	if err != nil {
 		return nil, err
 	}
 
-	converteds := make([]*pb.Entry, len(idx))
-	for i, e := range idx {
-		converteds[i] = r.convert(&e)
+	converteds := make([]*pb.RFC, len(got))
+	for i, rfc := range got {
+		converteds[i] = r.convert(rfc)
 	}
 
-	return &pb.Entries{
-		Entries: converteds,
+	return &pb.RFCs{
+		Rfcs: converteds,
 	}, nil
 }
 
-func (r *OnGRPC) Fetch(ctx context.Context, req *pb.FetchRequest) (*pb.Entry, error) {
-	e, err := r.usecase.Fetch(ctx, req.Id)
+func (r *OnGRPC) Find(ctx context.Context, req *pb.FindRequest) (*pb.RFC, error) {
+	found, err := r.usecase.Find(ctx, int(req.Id))
 	if err != nil {
 		return nil, err
 	}
 
-	return r.convert(e), nil
+	return r.convert(found), nil
 }
 
-func (r *OnGRPC) convert(e *domain.Entry) *pb.Entry {
-	return &pb.Entry{
-		Id: e.ID, Title: e.Title,
+func (r *OnGRPC) convert(rfc *domain.RFC) *pb.RFC {
+	return &pb.RFC{
+		Id:    int32(rfc.ID),
+		Title: rfc.Title,
 	}
 }
 
@@ -144,8 +157,8 @@ func (r *OnGRPC) logf(format string, as ...interface{}) {
 }
 
 type Printer interface {
-	PrintIndex(io.Writer, []domain.Entry)
-	Print(io.Writer, *domain.Entry)
+	PrintAll(io.Writer, []*domain.RFC) error
+	Print(io.Writer, *domain.RFC) error
 }
 
 func logf(format string, as ...interface{}) {
