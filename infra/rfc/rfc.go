@@ -2,62 +2,44 @@ package rfc
 
 import (
 	"context"
-	"encoding/xml"
 	"fmt"
 	"io"
 	"net/http"
 )
 
-var HTTPClient = &Client{
-	Fetcher: new(viaHTTP),
-}
-
 type Client struct {
-	Fetcher Fetcher
+	Repo Repo
 }
 
-func (c *Client) FetchIndex(ctx context.Context) (*Index, error) {
-	fetched, err := c.Fetcher.Fetch(ctx, "//www.rfc-editor.org/rfc-index.xml")
+func (c *Client) Get(ctx context.Context) ([]*RFC, error) {
+	return c.Repo.Get(ctx)
+}
+
+func (c *Client) Find(ctx context.Context, id int) (*RFC, error) {
+	return c.Repo.Find(ctx, id)
+}
+
+type Repo interface {
+	Get(context.Context) ([]*RFC, error)
+	Find(context.Context, int) (*RFC, error)
+}
+
+type RFC struct {
+	ID    string
+	Title string
+}
+
+type ViaHTTP struct {
+	IsSecure bool
+}
+
+func (f *ViaHTTP) Fetch(ctx context.Context, uri string) (io.ReadCloser, error) {
+	uri = f.compensate(uri)
+
+	r, err := http.NewRequestWithContext(ctx, http.MethodGet, uri, nil)
 	if err != nil {
 		return nil, err
 	}
-	defer fetched.Close()
-
-	index := new(Index)
-	if err := xml.NewDecoder(fetched).Decode(index); err != nil {
-		return nil, fmt.Errorf("failed to decode: %s", err)
-	}
-
-	return index, nil
-}
-
-func (c *Client) Fetch(ctx context.Context, id string) (*RFC, error) {
-	fetched, err := c.Fetcher.Fetch(ctx, fmt.Sprintf("//www.rfc-editor.org/rfc/%s.xml", id))
-	if err != nil {
-		return nil, err
-	}
-	defer fetched.Close()
-
-	rfc := new(RFC)
-	if err := xml.NewDecoder(fetched).Decode(rfc); err != nil {
-		return nil, fmt.Errorf("failed to decode: %s", err)
-	}
-
-	return rfc, nil
-}
-
-type Fetcher interface {
-	Fetch(context.Context, string) (io.ReadCloser, error)
-}
-
-type viaHTTP struct{}
-
-func (f *viaHTTP) Fetch(ctx context.Context, uri string) (io.ReadCloser, error) {
-	r, err := http.NewRequestWithContext(ctx, http.MethodGet, fmt.Sprintf("https:%s", uri), nil)
-	if err != nil {
-		return nil, err
-	}
-
 	resp, err := http.DefaultClient.Do(r)
 	if err != nil {
 		return nil, err
@@ -66,19 +48,11 @@ func (f *viaHTTP) Fetch(ctx context.Context, uri string) (io.ReadCloser, error) 
 	return resp.Body, nil
 }
 
-type Index struct {
-	RFCs []Entry `xml:"rfc-entry"`
-}
+func (f *ViaHTTP) compensate(uri string) string {
+	scheme := "https"
+	if !f.IsSecure {
+		scheme = "http"
+	}
 
-type Entry struct {
-	ID    string `xml:"doc-id"`
-	Title string `xml:"title"`
-}
-
-type RFC struct {
-	Front Front `xml:"front"`
-}
-
-type Front struct {
-	Title string `xml:"title"`
+	return fmt.Sprintf("%s:%s", scheme, uri)
 }

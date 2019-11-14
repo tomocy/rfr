@@ -20,7 +20,7 @@ func NewOnHTTP(addr string, printer Printer) *OnHTTP {
 	return &OnHTTP{
 		addr:    addr,
 		router:  chi.NewRouter(),
-		usecase: *app.NewEntryUsecase(new(infra.ViaHTTP)),
+		usecase: *app.NewEntryUsecase(infra.NewViaHTTP()),
 		printer: printer,
 	}
 }
@@ -77,7 +77,7 @@ func NewOnGRPC(addr string) *OnGRPC {
 	return &OnGRPC{
 		addr:    addr,
 		server:  *grpc.NewServer(),
-		usecase: *app.NewEntryUsecase(new(infra.ViaHTTP)),
+		usecase: *app.NewEntryUsecase(infra.NewViaHTTP()),
 	}
 }
 
