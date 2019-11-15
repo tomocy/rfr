@@ -25,8 +25,15 @@ type Repo interface {
 }
 
 type RFC struct {
-	ID    int
-	Title string
+	ID       int
+	Title    string
+	Sections []*Section
+}
+
+type Section struct {
+	Title    string
+	Body     string
+	Sections []*Section
 }
 
 type ViaHTTP struct {
