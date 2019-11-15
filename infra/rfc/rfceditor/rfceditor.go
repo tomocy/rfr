@@ -3,6 +3,7 @@ package rfceditor
 import (
 	"context"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"strconv"
@@ -73,6 +74,10 @@ func (r *InXML) convertRFC(raw *rfcxml.RFC) *rfc.RFC {
 
 type InHTML struct {
 	Fetcher Fetcher
+}
+
+func (r *InHTML) Get(context.Context) ([]*rfc.RFC, error) {
+	return nil, errors.New("not implemented")
 }
 
 func (r *InHTML) Find(ctx context.Context, id int) (*rfc.RFC, error) {
