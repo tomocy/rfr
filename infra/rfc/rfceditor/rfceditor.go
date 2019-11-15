@@ -8,7 +8,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/PuerkitoBio/goquery"
 	"github.com/tomocy/rfv/infra/rfc"
+	"github.com/tomocy/rfv/infra/rfc/rfceditor/html"
 	rfcxml "github.com/tomocy/rfv/infra/rfc/rfceditor/xml"
 )
 
@@ -71,6 +73,29 @@ func (r *InXML) convertRFC(raw *rfcxml.RFC) *rfc.RFC {
 
 type InHTML struct {
 	Fetcher Fetcher
+}
+
+func (r *InHTML) Find(ctx context.Context, id int) (*rfc.RFC, error) {
+	fetched, err := r.Fetcher.Fetch(ctx, fmt.Sprintf("//www.rfc-editor.org/rfc/rfc%d.html", id))
+	if err != nil {
+		return nil, err
+	}
+	defer fetched.Close()
+
+	return r.scrapeRFC(fetched)
+}
+
+func (r *InHTML) scrapeRFC(src io.Reader) (*rfc.RFC, error) {
+	doc, err := goquery.NewDocumentFromReader(src)
+	if err != nil {
+		return nil, err
+	}
+
+	if isOld := doc.Find("#name-table-of-contents").Length() < 1; isOld {
+		return new(html.Old).Scrape(doc)
+	}
+
+	return new(html.New).Scrape(doc)
 }
 
 type Fetcher interface {
