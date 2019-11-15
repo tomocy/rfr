@@ -26,7 +26,7 @@ func (r *ViaHTTP) Get(ctx context.Context) ([]*domain.RFC, error) {
 
 func (r *ViaHTTP) Find(ctx context.Context, id int) (*domain.RFC, error) {
 	client := &rfcPkg.Client{
-		Repo: &rfceditor.InXML{
+		Repo: &rfceditor.InHTML{
 			Fetcher: new(rfcPkg.ViaHTTP),
 		},
 	}
