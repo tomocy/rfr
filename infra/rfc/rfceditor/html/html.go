@@ -57,14 +57,19 @@ func (s *New) Scrape(doc *goquery.Document) (*rfc.RFC, error) {
 
 func (s *New) scrapeSections(doc *goquery.Document) []*rfc.Section {
 	var secs []*rfc.Section
-	doc.Find("section[id^=section-]").Each(func(i int, s *goquery.Selection) {
+	doc.Find("section[id^=section-]").Each(func(_ int, s *goquery.Selection) {
 		title := s.Find("h2 a").Not(".section-number").First().Text()
 		if title == "" {
 			return
 		}
+		var bodyWriter strings.Builder
+		s.Find("p[id^=section-]").Each(func(_ int, s *goquery.Selection) {
+			fmt.Fprintln(&bodyWriter, s.Text())
+		})
 
 		secs = append(secs, &rfc.Section{
 			Title: title,
+			Body:  bodyWriter.String(),
 		})
 	})
 
