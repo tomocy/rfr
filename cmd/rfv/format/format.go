@@ -24,8 +24,26 @@ func (p *InJSON) Print(w io.Writer, rfc *domain.RFC) error {
 
 func convert(raw *domain.RFC) *rfc {
 	return &rfc{
-		ID:    raw.ID,
-		Title: raw.Title,
+		ID:       raw.ID,
+		Title:    raw.Title,
+		Sections: convertSections(raw.Sections),
+	}
+}
+
+func convertSections(raw []*domain.Section) []*section {
+	converted := make([]*section, len(raw))
+	for i, sec := range raw {
+		converted[i] = convertSection(sec)
+	}
+
+	return converted
+}
+
+func convertSection(raw *domain.Section) *section {
+	return &section{
+		Title:    raw.Title,
+		Body:     raw.Body,
+		Sections: convertSections(raw.Sectinos),
 	}
 }
 
