@@ -30,6 +30,13 @@ func convert(raw *domain.RFC) *rfc {
 }
 
 type rfc struct {
-	ID    int    `json:"id"`
-	Title string `json:"title"`
+	ID       int        `json:"id"`
+	Title    string     `json:"title"`
+	Sections []*section `json:"sections"`
+}
+
+type section struct {
+	Title    string     `json:"title"`
+	Body     string     `json:"body"`
+	Sections []*section `json:"sections"`
 }
