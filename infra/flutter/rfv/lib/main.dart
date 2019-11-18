@@ -239,3 +239,19 @@ class RFC {
     );
   }
 }
+
+class Section {
+  Section(this.title, this.body, this.sections);
+
+  String title;
+  String body;
+  List<Section> sections;
+
+  factory Section.fromJSON(Map<String, dynamic> json) {
+    return Section(
+      json['title'],
+      json['body'],
+      (json['sections'] as List<dynamic>).cast<Map<String, dynamic>>().map((Map<String, dynamic> json) => Section.fromJSON(json)).toList(),
+    );
+  }
+}
