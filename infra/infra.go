@@ -49,7 +49,25 @@ func adaptRFCs(raw []*rfcPkg.RFC) []*domain.RFC {
 
 func adaptRFC(raw *rfcPkg.RFC) *domain.RFC {
 	return &domain.RFC{
-		ID:    raw.ID,
-		Title: raw.Title,
+		ID:       raw.ID,
+		Title:    raw.Title,
+		Sections: adaptSections(raw.Sections),
+	}
+}
+
+func adaptSections(raw []*rfcPkg.Section) []*domain.Section {
+	adapted := make([]*domain.Section, len(raw))
+	for i, sec := range raw {
+		adapted[i] = adaptSection(sec)
+	}
+
+	return adapted
+}
+
+func adaptSection(raw *rfcPkg.Section) *domain.Section {
+	return &domain.Section{
+		Title:    raw.Title,
+		Body:     raw.Body,
+		Sectinos: adaptSections(raw.Sections),
 	}
 }
