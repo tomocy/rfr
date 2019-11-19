@@ -64,6 +64,10 @@ func (f *ViaHTTP) compensate(uri string) string {
 	return fmt.Sprintf("%s:%s", scheme, uri)
 }
 
+type Fetcher interface {
+	Fetch(context.Context, string) (io.ReadCloser, error)
+}
+
 type URI interface {
 	OfIndex(string) string
 	Of(string, int) string
