@@ -34,6 +34,7 @@ type Repo interface {
 type RFC struct {
 	ID       int
 	Title    string
+	Authors  []string
 	Sections []*Section
 }
 
