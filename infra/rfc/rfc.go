@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
+	"path/filepath"
 	"strings"
 
 	"github.com/tomocy/rfv/infra/rfc/text"
@@ -149,4 +150,28 @@ type Fetcher interface {
 type URI interface {
 	OfIndex(string) string
 	Of(string, int) string
+}
+
+type RFCEditor struct{}
+
+func (r *RFCEditor) OfIndex(ext string) string {
+	switch ext {
+	case "txt":
+		return r.endpoint("rfc-index.txt")
+	default:
+		return ""
+	}
+}
+
+func (r *RFCEditor) Of(ext string, id int) string {
+	switch ext {
+	case "txt":
+		return r.endpoint("rfc", fmt.Sprintf("rfc%d.txt", id))
+	default:
+		return ""
+	}
+}
+
+func (r *RFCEditor) endpoint(ps ...string) string {
+	return "//" + filepath.Join(append([]string{"www.rfc-editor.org"}, ps...)...)
 }
