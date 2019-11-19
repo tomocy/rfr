@@ -63,3 +63,8 @@ func (f *ViaHTTP) compensate(uri string) string {
 
 	return fmt.Sprintf("%s:%s", scheme, uri)
 }
+
+type URI interface {
+	OfIndex(string) string
+	Of(string, int) string
+}
