@@ -1,10 +1,16 @@
 package rfc
 
 import (
+	"bufio"
 	"context"
+	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"net/http"
+	"strings"
+
+	"github.com/tomocy/rfv/infra/rfc/text"
 )
 
 type Client struct {
@@ -67,6 +73,73 @@ func (f *ViaHTTP) compensate(uri string) string {
 type InText struct {
 	URI     URI
 	Fetcher Fetcher
+}
+
+func (r *InText) Get(ctx context.Context) ([]*RFC, error) {
+	fetched, err := r.Fetcher.Fetch(ctx, r.URI.OfIndex("txt"))
+	if err != nil {
+		return nil, err
+	}
+	defer fetched.Close()
+
+	formatted, err := r.reformatForIndex(fetched)
+	if err != nil {
+		return nil, err
+	}
+
+	index := new(text.Index)
+	if _, err := fmt.Fscan(formatted, index); err != nil {
+		return nil, err
+	}
+
+	rfcs := make([]*RFC, len(index.Lines))
+	for i, line := range index.Lines {
+		rfcs[i] = &RFC{
+			ID:    line.ID,
+			Title: string(line.Title),
+		}
+	}
+
+	return rfcs, nil
+}
+
+func (r *InText) reformatForIndex(target io.Reader) (io.Reader, error) {
+	target, err := r.readerFromIndex(target)
+	if err != nil {
+		return nil, err
+	}
+
+	var elems, lines []string
+	scanner := bufio.NewScanner(target)
+	for scanner.Scan() {
+		text := scanner.Text()
+		if text == "" {
+			lines = append(lines, strings.Join(elems, " "))
+			elems = nil
+			continue
+		}
+
+		elems = append(elems, strings.Trim(text, " "))
+	}
+	lines = append(lines, strings.Join(elems, " "))
+	elems = nil
+
+	return strings.NewReader(strings.Join(lines, "\n")), nil
+}
+
+func (r *InText) readerFromIndex(src io.Reader) (io.Reader, error) {
+	read, err := ioutil.ReadAll(src)
+	if err != nil {
+		return nil, err
+	}
+	target := string(read)
+
+	begin := strings.Index(target, "0001")
+	if begin < 0 {
+		return nil, errors.New("the start position to parse index is not found")
+	}
+
+	return strings.NewReader(target[begin:]), nil
 }
 
 type Fetcher interface {
