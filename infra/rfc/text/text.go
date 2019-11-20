@@ -1,8 +1,11 @@
 package text
 
 import (
+	"bytes"
 	"fmt"
 	"io"
+	"strings"
+	"time"
 )
 
 type Index struct {
@@ -30,13 +33,22 @@ func (i *Index) Scan(state fmt.ScanState, _ rune) error {
 }
 
 type LineOfIndex struct {
-	ID    int
-	Title Title
-	other other
+	ID                  int
+	Title               Title
+	AuthorsAndIssueDate AuthorsAndIssueDate
+	other               other
 }
 
 func (l *LineOfIndex) Scan(state fmt.ScanState, _ rune) error {
-	_, err := fmt.Fscan(state, &l.ID, &l.Title, &l.other)
+	_, err := fmt.Fscan(state, &l.ID, &l.Title)
+	if err != nil {
+		return err
+	}
+	if l.Title == "Not Issued" {
+		return nil
+	}
+
+	_, err = fmt.Fscan(state, &l.AuthorsAndIssueDate, &l.other)
 	return err
 }
 
@@ -53,6 +65,41 @@ func (t *Title) Scan(state fmt.ScanState, _ rune) error {
 	state.ReadRune()
 
 	*t = Title(read)
+
+	return nil
+}
+
+type AuthorsAndIssueDate struct {
+	Authors  []string
+	IssuedAt time.Time
+}
+
+func (a *AuthorsAndIssueDate) Scan(state fmt.ScanState, _ rune) error {
+	read, err := state.Token(true, func(char rune) bool {
+		return char != '('
+	})
+	if err != nil {
+		return err
+	}
+
+	read = bytes.TrimRight(read, ". ")
+	idx := bytes.LastIndex(read, []byte{'.'})
+	rawAuthors, rawDate := string(read[:idx]), strings.TrimLeft(string(read[idx+1:]), " ")
+
+	a.Authors = func(ss []string, fn func(string) string) []string {
+		for i, s := range ss {
+			ss[i] = fn(s)
+		}
+
+		return ss
+	}(strings.Split(rawAuthors, ","), func(s string) string {
+		return strings.Trim(s, " ")
+	})
+
+	a.IssuedAt, err = time.Parse("January 2006", rawDate)
+	if err != nil {
+		return fmt.Errorf("failed to parse issue date: %s", err)
+	}
 
 	return nil
 }

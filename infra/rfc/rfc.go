@@ -99,8 +99,10 @@ func (r *InText) Get(ctx context.Context) ([]*RFC, error) {
 	rfcs := make([]*RFC, len(index.Lines))
 	for i, line := range index.Lines {
 		rfcs[i] = &RFC{
-			ID:    line.ID,
-			Title: string(line.Title),
+			ID:       line.ID,
+			Title:    string(line.Title),
+			Authors:  line.AuthorsAndIssueDate.Authors,
+			IssuedAt: line.AuthorsAndIssueDate.IssuedAt,
 		}
 	}
 
