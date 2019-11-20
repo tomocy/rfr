@@ -50,5 +50,15 @@ func (d *RFC7991) adapt(dst *rfc2.RFC, src *rfc7991.RFC) error {
 
 	dst.Title = src.Front.Title
 
+	authors := make([]*rfc2.Author, len(src.Front.Authors))
+	for i, author := range src.Front.Authors {
+		authors[i] = &rfc2.Author{
+			Name:         author.Name(),
+			Fullname:     author.Fullname,
+			Organization: author.Organization,
+		}
+	}
+	dst.Authors = authors
+
 	return nil
 }
