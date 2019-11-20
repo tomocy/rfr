@@ -3,6 +3,7 @@ package rfc7991
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type RFC struct {
@@ -13,6 +14,7 @@ type Front struct {
 	Title       string      `xml:"title"`
 	SeriesInfos SeriesInfos `xml:"seriesInfo"`
 	Authors     []*Author   `xml:"author"`
+	Date        Date        `xml:"date"`
 }
 
 type SeriesInfos []*SeriesInfo
@@ -46,4 +48,35 @@ func (a *Author) Name() string {
 	}
 
 	return fmt.Sprintf("%s %s", initials, a.Surname)
+}
+
+type Date struct {
+	Day   string `xml:"day,attr"`
+	Month string `xml:"month,attr"`
+	Year  string `xml:"year,attr"`
+}
+
+func (d *Date) Time() (time.Time, error) {
+	var formatElems, targetElems []string
+	if d.Day != "" {
+		formatElems, targetElems = append(formatElems, "02"), append(targetElems, d.Day)
+	}
+	if d.Month != "" {
+		if strings.Contains(
+			"1 2 3 4 5 6 7 8 9 10 11 12",
+			strings.TrimLeft(d.Month, "0"),
+		) {
+			formatElems, targetElems = append(formatElems, "01"), append(targetElems, d.Month)
+		} else {
+			formatElems, targetElems = append(formatElems, "January"), append(targetElems, d.Month)
+		}
+	}
+	if d.Year != "" {
+		formatElems, targetElems = append(formatElems, "2006"), append(targetElems, d.Year)
+	}
+
+	return time.Parse(
+		strings.Join(formatElems, " "),
+		strings.Join(targetElems, " "),
+	)
 }

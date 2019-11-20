@@ -60,5 +60,9 @@ func (d *RFC7991) adapt(dst *rfc2.RFC, src *rfc7991.RFC) error {
 	}
 	dst.Authors = authors
 
+	if date, err := src.Front.Date.Time(); err == nil {
+		dst.IssuedAt = date
+	}
+
 	return nil
 }
