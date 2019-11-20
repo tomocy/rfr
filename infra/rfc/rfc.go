@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/tomocy/rfv/infra/rfc/text"
 )
@@ -35,6 +36,7 @@ type RFC struct {
 	ID       int
 	Title    string
 	Authors  []string
+	IssuedAt time.Time
 	Sections []*Section
 }
 
