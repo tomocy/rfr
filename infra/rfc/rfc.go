@@ -33,11 +33,16 @@ type Repo interface {
 }
 
 type RFC struct {
-	ID       int
-	Title    string
-	Authors  []string
-	IssuedAt time.Time
-	Sections []*Section
+	ID             int
+	Title          string
+	Authors        []string
+	IssuedAt       time.Time
+	Status         string
+	ObsoletingIDs  []int
+	ObsoletedByIDs []int
+	UpdatingIDs    []int
+	UpdatedByIDs   []int
+	Sections       []*Section
 }
 
 type Section struct {
@@ -99,10 +104,15 @@ func (r *InText) Get(ctx context.Context) ([]*RFC, error) {
 	rfcs := make([]*RFC, len(index.Lines))
 	for i, line := range index.Lines {
 		rfcs[i] = &RFC{
-			ID:       line.ID,
-			Title:    string(line.Title),
-			Authors:  line.AuthorsAndIssueDate.Authors,
-			IssuedAt: line.AuthorsAndIssueDate.IssuedAt,
+			ID:             line.ID,
+			Title:          string(line.Title),
+			Authors:        line.AuthorsAndIssueDate.Authors,
+			IssuedAt:       line.AuthorsAndIssueDate.IssuedAt,
+			Status:         line.Metadata.Status,
+			ObsoletingIDs:  line.Metadata.ObsoletingIDs,
+			ObsoletedByIDs: line.Metadata.ObsoletedByIDs,
+			UpdatingIDs:    line.Metadata.UpdatingIDs,
+			UpdatedByIDs:   line.Metadata.UpdatedByIDs,
 		}
 	}
 
@@ -146,6 +156,32 @@ func (r *InText) readerFromIndex(src io.Reader) (io.Reader, error) {
 	}
 
 	return strings.NewReader(target[begin:]), nil
+}
+
+func (r *InText) Find(ctx context.Context, id int) (*RFC, error) {
+	fetched, err := r.Fetcher.Fetch(ctx, r.URI.Of("txt", id))
+	if err != nil {
+		return nil, err
+	}
+	defer fetched.Close()
+
+	if parser, ok := r.parsers()[id]; ok {
+		return parser(fetched)
+	}
+
+	rfc := new(text.RFC)
+	if _, err := fmt.Fscan(fetched, rfc); err != nil {
+		return nil, err
+	}
+
+	return &RFC{
+		ID:    rfc.Metadata.ID,
+		Title: rfc.Title,
+	}, nil
+}
+
+func (r *InText) parsers() map[int]func(io.Reader) (*RFC, error) {
+	return make(map[int]func(io.Reader) (*RFC, error))
 }
 
 type Fetcher interface {

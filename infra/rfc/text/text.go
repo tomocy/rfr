@@ -1,11 +1,11 @@
 package text
 
 import (
-	"bytes"
 	"fmt"
 	"io"
-	"strings"
-	"time"
+
+	"github.com/tomocy/rfv/infra/rfc/text/index"
+	"github.com/tomocy/rfv/infra/rfc/text/single"
 )
 
 type Index struct {
@@ -34,9 +34,9 @@ func (i *Index) Scan(state fmt.ScanState, _ rune) error {
 
 type LineOfIndex struct {
 	ID                  int
-	Title               Title
-	AuthorsAndIssueDate AuthorsAndIssueDate
-	other               other
+	Title               index.Title
+	AuthorsAndIssueDate index.AuthorsAndIssueDate
+	Metadata            index.Metadata
 }
 
 func (l *LineOfIndex) Scan(state fmt.ScanState, _ rune) error {
@@ -48,58 +48,30 @@ func (l *LineOfIndex) Scan(state fmt.ScanState, _ rune) error {
 		return nil
 	}
 
-	_, err = fmt.Fscan(state, &l.AuthorsAndIssueDate, &l.other)
+	_, err = fmt.Fscan(state, &l.AuthorsAndIssueDate, &l.Metadata)
 	return err
 }
 
-type Title string
+type RFC struct {
+	Metadata single.Metadata
+	Title    string
+}
 
-func (t *Title) Scan(state fmt.ScanState, _ rune) error {
+func (r *RFC) Scan(state fmt.ScanState, _ rune) error {
+	if _, err := fmt.Fscan(state, &r.Metadata); err != nil {
+		return err
+	}
+
+	state.SkipSpace()
+
 	read, err := state.Token(true, func(char rune) bool {
-		return char != '.'
+		return char != '\n'
 	})
 	if err != nil {
 		return err
 	}
 
-	state.ReadRune()
-
-	*t = Title(read)
-
-	return nil
-}
-
-type AuthorsAndIssueDate struct {
-	Authors  []string
-	IssuedAt time.Time
-}
-
-func (a *AuthorsAndIssueDate) Scan(state fmt.ScanState, _ rune) error {
-	read, err := state.Token(true, func(char rune) bool {
-		return char != '('
-	})
-	if err != nil {
-		return err
-	}
-
-	read = bytes.TrimRight(read, ". ")
-	idx := bytes.LastIndex(read, []byte{'.'})
-	rawAuthors, rawDate := string(read[:idx]), strings.TrimLeft(string(read[idx+1:]), " ")
-
-	a.Authors = func(ss []string, fn func(string) string) []string {
-		for i, s := range ss {
-			ss[i] = fn(s)
-		}
-
-		return ss
-	}(strings.Split(rawAuthors, ","), func(s string) string {
-		return strings.Trim(s, " ")
-	})
-
-	a.IssuedAt, err = time.Parse("January 2006", rawDate)
-	if err != nil {
-		return fmt.Errorf("failed to parse issue date: %s", err)
-	}
+	r.Title = string(read)
 
 	return nil
 }
